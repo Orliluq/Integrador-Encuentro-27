@@ -1,0 +1,117 @@
+/// Condiciones para resolver el ejercicio:
+/// Es obligatorio el uso de al menos una variable N-dimensional.
+/// Recordar que el valor de entrada tiene que ser una palabra COMPLETA de 9 caracteres, de 16 caracteres o de 1369 caracteres (no es necesario probar este último caso).
+/// La muestra la guardamos en una variable en el código, no por consola.
+/// Subdivide el problema de tal forma de utilizar dos subprogramas o más.
+/// Los valores de entrada deberán ser una cadena continuada de caracteres. No puedes pedir de a una letra y no puedes preguntar la dimensión de la matriz 
+/// (la dimensión se tiene que deducir de la muestra).
+/// Se puede consultar en el equipo por orientaciones para resolverlo, no se puede compartir código, ni mostrar, ni dictar.
+
+/// EJERCICIO INTEGRADOR
+
+/// El apocalipsis Zombie se ha desatado, pero aún hay esperanza. El Dr. Galard ha conseguido aislar el gen Z
+/// analizando muestras genéticas codificadas. Una muestra se corresponde con una secuencia de caracteres
+/// compuesta de cuatro posibles bases (A,B,C,D), por ejemplo: "ACDDCADBCDABDBBA". Para poder detectar el gen
+/// Z, se representa la muestra como una matriz cuadrada (MxM) y se busca en las dos diagonales principales que
+/// todas las bases sean iguales. Siguiendo el ejemplo de la muestra anterior la matriz resultante es:
+/// ACDD
+/// CADB
+/// CDAB 
+/// DBBA
+/// Galard aclara que para que la muestra sea válida el orden de la matriz (el valor de M) debe ser 3x3, 4x4 o 37x37
+/// (según la muestra). Por desgracia, de antemano no es posible saber el orden de la matriz y el mismo debe ser
+/// inferido de la muestra ingresada.
+/// Tu misión: hacer un programa que permita ingresar una muestra completa, detectar si es válida, y de ser así, que
+/// imprima la matriz y muestre un mensaje que indique si se ha detectado o no el gen Z.
+/// Hoy la humanidad depende de ti.
+/// Reglas de Resolución:
+/// a) Es obligatorio el uso de al menos una variable N-dimensional.
+/// b) La muestra la guardamos en una variable en el código, no por consola. Es decir:
+/// NO hay que usar Leer muestra sino asignarle un valor muestra = "ACDDCADBCDABDBBA" en el código
+/// c) Subdivida el problema de tal forma de utilizar al menos dos subprogramas.
+
+// Dun-Orlibet
+
+Algoritmo IntegradorZombie
+	
+	Definir m Como Entero;
+	Definir genZ, muestra Como Cadena;
+	muestra  = "ACDDCADBCDABDBBA";
+	m = raiz(Longitud(muestra))
+	Dimension GenZ(m, m)
+	
+	Escribir "-------------------------------------------------";
+	Escribir "Bienvenido al programa genético del Dr. Galard.";
+	Escribir "-------------------------------------------------";
+	
+	ingresarGenZ(genZ, m, muestra)
+	mostrarGenZ(genZ, m)
+	buscarGenZ(genZ, m)
+	
+	// Dimension(3,3);
+	// Dimension(4,4);
+	// Dimension(37,37);
+	
+FinAlgoritmo
+
+SubProceso ingresarGenZ(genZ, m, muestra) 
+	Definir i, j, contador Como Entero
+	
+	contador = 0;
+	
+	Para i = 0 Hasta m - 1 Hacer
+		Para  j = 0 Hasta  m - 1 Hacer
+			genZ(i, j) = SubCadena(Mayusculas(muestra), contador, contador)
+			contador = contador + 1
+		FinPara
+	FinPara
+FinSubProceso
+
+SubProceso mostrarGenZ(genZ,m)
+	Definir i, j Como Entero
+	Para i = 0 Hasta m - 1 Hacer
+		Para j = 0 Hasta m - 1 Hacer
+			Escribir Sin Saltar  "[" genZ(i,j), "]";
+		FinPara
+		Escribir " ";
+	FinPara
+FinSubProceso
+
+SubProceso buscarGenZ(genZ, m) 
+	Definir i, j, contadorDiagonal1, contadorDiagonal2 Como Entero
+	Definir validarDiagonal1, validarDiagonal2 Como Caracter 
+	Dimension validarDiagonal1[m], validarDiagonal2[m]
+	
+	contadorDiagonal1 = 0;
+	contadorDiagonal2 = 0;
+	
+	Para i = 0 Hasta m - 1 Hacer
+		Para j = 0 Hasta m - 1 Hacer
+			Si i == j Entonces
+				validarDiagonal1[i] = genZ[i, j]
+			FinSi
+			Si i + j = m - 1 Entonces
+				validarDiagonal2[i] = genZ[i, j]
+			FinSi
+		FinPara
+	FinPara
+	
+	Para i = 0 Hasta m - 1 Hacer
+		Si validarDiagonal1[i] == genZ[0,0] Entonces
+			contadorDiagonal1 = contadorDiagonal1 + 1
+		FinSi
+		
+		Si validarDiagonal2[i] == genZ[0,m-1] Entonces
+			contadorDiagonal2 = contadorDiagonal2 + 1
+		FinSi
+	FinPara
+	
+	Si contadorDiagonal1 = m Y contadorDiagonal2 = m Entonces
+		Escribir " ";
+		Escribir "Se detecta el GenZ, con las letras ", genZ(0,0) " y ", genZ(0, m - 1) ". Fin del programa!!."
+	SiNo
+		Escribir "No se detecta el GenZ, las diagonales de la matriz son distintas entre sí. Fin del Programa!!."
+		Escribir "---------------------------------------------------------------------------------------------";
+	FinSi
+	
+FinSubProceso
